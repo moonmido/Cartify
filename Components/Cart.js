@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, TouchableOpacity, Dimensions, ScrollView, Image } from 'react-native'
+import { View, Text, SafeAreaView, TouchableOpacity, Dimensions, ScrollView, Image, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -12,6 +12,24 @@ const {width,height} = Dimensions.get('window');
 const Cart = () => {
 
 const [card,setCard] = useState([]);
+
+
+const handleOrder = async() =>{
+try {
+  const userID = await AsyncStorage.getItem('userID');
+  if(userID.length===0){
+    Alert.alert("Please Log in ");
+  }
+await setDoc(doc(db,"Orders",userID),{
+  list_orders : card,
+})
+
+} catch (error) {
+  
+}
+
+}
+
 
 
 useEffect(() => {
@@ -35,7 +53,15 @@ useEffect(() => {
     }
   };
   handleCart();
+
 }, [card]);
+
+
+const totale = card.reduce((sum,item)=>{
+  return sum+(item.price * item.quan);
+  },0)
+  
+
 
 
 const handleRemoveAll = async () => {
@@ -48,7 +74,13 @@ const handleRemoveAll = async () => {
         Cart: []  // Setting Cart to an empty array
       });
       setCard([]);  // Clear the local state as well
+
+await updateDoc(doc(db,"Orders",userID),{
+  list_orders : [] 
+})
+
     }
+
   } catch (error) {
     console.log("Error removing all products:", error);
   }
@@ -71,7 +103,14 @@ if(user.exists()){
       title: item.title
     })
   })
-
+await updateDoc(doc(db,"Orders",userID),{
+  list_orders : arrayRemove({
+    img: item.img,
+      price: item.price,
+      quan: item.quan,
+      title: item.title
+  })
+})
 }
 
 }
@@ -115,7 +154,7 @@ if(user.exists()){
 
 {
   card.map((item, index) =>(
-  <View key={index} style={{marginTop: height * 0.02, flexDirection: "row", backgroundColor: "#ECEAEA", width: width * 0.99, paddingVertical: 15, borderRadius: 15, marginLeft: 2}}>
+  <View key={index} style={{elevation:15,marginTop: height * 0.02, flexDirection: "row", backgroundColor: "#ECEAEA", width: width * 0.99, paddingVertical: 15, borderRadius: 15, marginLeft: 2}}>
     <Image source={{uri: item.img}} style={{width: width * 0.2, height: height * 0.1,resizeMode:"contain",borderRadius:10,backgroundColor:"white"}} />
     <View style={{width: width * 0.65, marginTop: 5,marginLeft:10}}>
       <Text style={{fontSize: 13}}>
@@ -126,8 +165,8 @@ if(user.exists()){
         <Text style={{paddingHorizontal: 25}}>Quant : <Text style={{fontWeight: "800", color: "black"}}>{item.quan}</Text></Text>
       </View>
     </View>
-    <View style={{marginLeft:-25,justifyContent:"center",alignItems:"center"}}>
-      <Text style={{marginTop: 3, fontWeight: "800", color: "black"}}>${item.price}</Text>
+    <View style={{justifyContent:"center",alignItems:"center",marginLeft:-width*0.11}}>
+      <Text style={{marginTop: 3, fontWeight: "800", color: "black",fontSize:13}}>${item.price.toFixed(2)}</Text>
       <TouchableOpacity onPress={()=>handleRemove(item)} style={{marginTop: height * 0.015, backgroundColor: "#8E6CEF", borderRadius: 55, width: width * 0.09, height: height * 0.045, marginLeft: 5}}>
         <FontAwesome name="remove" size={20} color="white" style={{textAlign: "center", padding: 4}} />
       </TouchableOpacity>
@@ -135,7 +174,16 @@ if(user.exists()){
   </View>
 ))}
 
+{
+card.length!==0 && (
+<View style={{justifyContent:"center",alignItems:"center",marginTop:height*0.15}}>
+<TouchableOpacity onPress={handleOrder} style={{backgroundColor:"#8E6CEF",borderRadius:35}}>
+  <Text style={{padding:20,fontWeight:"800",fontSize:15,color:"white"}}>Checkout $ {totale.toFixed(2)}</Text>
+</TouchableOpacity>
 </View>
+)}
+</View>
+
 </ScrollView>  
 
 )
