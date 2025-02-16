@@ -127,11 +127,15 @@ await updateDoc(doc(db,"Orders",userID),{
 <View style={{marginTop:height*0.05}}>
 <Text style={{fontWeight:"800",fontSize:18,textAlign:"center"}}>Cart</Text>
 </View>
+
+{
+  card.length!==0 && (
 <View style={{marginTop:height*0.05,marginRight:width*0.03}}>
 <TouchableOpacity style={{width:width*0.32,position:"absolute",right:0}} onPress={handleRemoveAll}>
   <Text style={{textAlign:"right",fontSize:16,padding:3}}>Remove All</Text>
 </TouchableOpacity>
 </View>
+)}
 
 {
   console.log(card)
