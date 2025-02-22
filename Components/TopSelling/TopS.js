@@ -12,9 +12,9 @@ const [loading, setLoading] = useState(true);
 
 const handleTopProd = async (limit = 6) => {
   try {
-    const response = await fetch(`https://fakestoreapi.com/products?limit=${limit}`);
+    const response = await fetch(`https://api.escuelajs.co/api/v1/products?limit=${limit}`);
     const data = await response.json();
-    setProd(data); // Set the fetched products directly
+    setProd(data.slice(0,8)); // Set the fetched products directly
     setLoading(false);
   } catch (error) {
     console.error(error);
@@ -38,7 +38,7 @@ if (loading) {
   return (
     <SafeAreaView>
 
-<View style={{display:"flex",flexDirection:"row",justifyContent:"space-between"}}>
+<View style={{display:"flex",flexDirection:"row",justifyContent:"space-between" , marginTop:10}}>
 <Text style={{ fontSize: 16, fontWeight: "800" }}>Top Selling</Text>
         <TouchableWithoutFeedback onPress={() => navigation.navigate("seeAllTop")}>
           <Text style={{ fontSize: 16, marginRight: width * 0.15 }}>See All</Text>
@@ -50,14 +50,14 @@ if (loading) {
             prod.map((item)=>(
                 <TouchableWithoutFeedback onPress={()=>navigation.navigate("prodview",{
 title : item.title,
-img : item.image,
+img : item.images,
 price : item.price,
 description : item.description
 
 
                 })}>
                 <View style={{marginTop:15,height:height*0.38,width:width*0.45,display:"flex",marginHorizontal:10,backgroundColor:"white",borderRadius:15}}>
-<Image source={{uri:item.image}} style={{width:width*0.3,height:height*0.25,resizeMode:"contain",marginLeft:width*0.07}}/>
+<Image source={{uri:item.images[0]}} style={{width:width*0.3,height:height*0.25,resizeMode:"contain",marginLeft:width*0.07}}/>
 
 <Text style={{fontSize:12,paddingTop:10,marginLeft:7}}>{item.title.length>19 ? item.title.slice(0,19)+"...." : item.title}</Text>
 <Text style={{fontWeight:"700",fontSize:13,marginTop:5,marginLeft:7}}>{item.price} $</Text>

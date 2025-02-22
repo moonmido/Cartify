@@ -20,12 +20,14 @@ const [save,setSave] = useState(true);
 
 
 
+const [counter,setCounter] = useState(0);
 
 
   const handleAllProd = async()=>{
     try {
-      const response = await fetch('https://fakestoreapi.com/products');
+      const response = await fetch('https://api.escuelajs.co/api/v1/products');
       const data = await response.json();
+setCounter(data.length);
     setAllPROD(data);
     setLoading(false);
     } catch (error) {
@@ -50,7 +52,7 @@ if(loading){
 <Ionicons name="chevron-back" size={24} color="black"/>
 </TouchableOpacity>
     <ScrollView  showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom:100}}>
-    <Text style={{fontWeight:"700",marginLeft:width*0.05,fontSize:20}}>All Products (20)</Text>
+    <Text style={{fontWeight:"700",marginLeft:width*0.05,fontSize:20}}>All Products ({counter})</Text>
     <View
       style={{
         flexDirection: "row",
@@ -62,7 +64,7 @@ if(loading){
       {allPROD.map((item, index) => (
         <TouchableWithoutFeedback key={index} onPress={()=>navigation.navigate("prodview",{
 title : item.title,
-img : item.image,
+img : item.images,
 price : item.price,
 description : item.description
 
@@ -82,9 +84,9 @@ description : item.description
           <Feather name="heart" size={16} color={save? "black" : "red"}  style={{position:"absolute",right:0,margin:8}}/>
           </TouchableOpacity>
             <Image
-              source={{ uri: item.image }}
+              source={{ uri: item.images[0] }}
               style={{
-                width: width * 0.27,
+                width: width * 0.3,
                 height: height * 0.25,
                 resizeMode: "contain",
                 marginLeft: width * 0.05,

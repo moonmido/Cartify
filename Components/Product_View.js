@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView } from 'react-native-gesture-handler';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import {db} from '../Firebase/firebase';
 import {doc,setDoc,getDoc,updateDoc,arrayUnion,arrayRemove} from "firebase/firestore"
 const {width,height} = Dimensions.get("window");
@@ -129,33 +129,38 @@ useEffect(() => {
 
 
 
-const handleAddToCart= async ()=>{
+const handleAddToCart = async () => {
   try {
     const userID = await AsyncStorage.getItem("userID");
-    const user = await getDoc(doc(db,"Users",userID));
-if(user.exists()){
-let temCart = user.data().Cart || [];
-const exist = temCart.find(item=>item.title===title);
-if(exist){
-  if(exist.quan !==quan){
-const updCard = temCart.map(item=>item.title===title ? {...item,quan} : item);    
-    await updateDoc(doc(db,"Users",userID),{
-      Cart : updCard,
-    })  
-  }
-}else{
-  await updateDoc(doc(db,"Users",userID),{
-    Cart : arrayUnion({title,quan,price,img}),
-  });
-}
-}
-    console.log("Send to Cart of user ID = ",userID);
-  } catch (error) {
-    console.error(error);
-  }
+    if (!userID) throw new Error("User ID not found in AsyncStorage");
 
-  
-}
+    const userRef = doc(db, "Users", userID);
+    const user = await getDoc(userRef);
+
+    if (user.exists()) {
+      let temCart = user.data().Cart || [];
+      const exist = temCart.find((item) => item.title === title);
+
+      if (exist) {
+        if (exist.quan !== quan) {
+          const updCart = temCart.map((item) =>
+            item.title === title ? { ...item, quan } : item
+          );
+
+          await updateDoc(userRef, { Cart: updCart });
+        }
+      } else {
+        await updateDoc(userRef, {
+          Cart: arrayUnion({ title, quan, price, img: img[0] }), // Only first image
+        });
+      }
+    }
+
+    console.log("Sent to Cart of user ID =", userID);
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+  }
+};
 
 
 
@@ -172,8 +177,17 @@ const updCard = temCart.map(item=>item.title===title ? {...item,quan} : item);
 </TouchableOpacity>
 </View>
 <View style={{marginTop:height*0.03,width:width*0.9}}>
-<Image source={{uri:img}} style={{width:width*0.55,height:height*0.4, resizeMode:"contain",marginLeft:width*0.18,backgroundColor:"white",borderRadius:15}}/>
-<Text style={{marginTop:height*0.03,fontWeight:"800"}}>{title}</Text>
+ <FlatList 
+  data={img}
+  horizontal
+  pagingEnabled
+  renderItem={({item,count})=>(
+    <Image source={{uri:item}} style={{width:width*0.7,height:height*0.45, resizeMode:"contain",backgroundColor:"white",borderRadius:15,marginLeft:width*0.1}}/>
+  )}
+ />
+  <Text style={{textAlign:"center",fontSize:35}}>...</Text>
+
+<Text style={{marginTop:height*0.01,fontWeight:"800"}}>{title}</Text>
 <Text style={{color:"#8E6CEF",fontWeight:"700",marginTop:10}}>$ {price} </Text>
 
 <View style={{backgroundColor:"#ECEAEA",width:width*0.9,height:height*0.1,marginTop:20,position:"relative",borderRadius:15}}>

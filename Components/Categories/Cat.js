@@ -5,10 +5,9 @@ import {
   Dimensions,
   FlatList,
   Image,
-  TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
-import Categorie from "./Data";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
@@ -16,33 +15,38 @@ const { width, height } = Dimensions.get("window");
 const Cat = () => {
   const navigation = useNavigation();
 
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleSend = (title) => {
-    // Map titles directly to category names
-    let category = "";
-
-    if (title === "Electronics") {
-      category = "electronics";
-    } else if (title === "Jewelery") {
-      category = "jewelery";
-    } else if (title === "Men's Clothing") {
-      category = "men's clothing";
-    } else if (title === "Women's Clothing") {
-      category = "women's clothing";
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch("https://api.escuelajs.co/api/v1/categories");
+      let data = await response.json();
+  
+      // Filter out "Computers" and "Grocery" categories
+      data = data.filter(item => item.name !== "Computer Category" && item.name !== "Grosery");
+  data = data.slice(0,4)
+      setCategories(data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    } finally {
+      setLoading(false);
     }
-
-    // Navigate with the category name
-    navigation.navigate("CatProd", {
-      categorie: category,
-    });
   };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="blue" />;
+  }
 
   return (
     <View>
       {/* Categories Header */}
       <View
         style={{
-          display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
           marginBottom: 10,
@@ -56,25 +60,23 @@ const Cat = () => {
 
       {/* Categories FlatList */}
       <FlatList
-        data={Categorie}
-        style={{ marginTop: 10 }}
+        data={categories}
+        style={{ marginTop: 10 , paddingRight:50 }}
         horizontal
         renderItem={({ item }) => (
-          <TouchableWithoutFeedback onPress={() => handleSend(item.title)}>
-            <View
-              style={{
-                width: width * 0.23,
-              }}
-            >
+          <TouchableWithoutFeedback onPress={() => navigation.navigate("CatProd", { category: item.name })}>
+            <View style={{ width: width * 0.23, alignItems: "center" }}>
               <Image
-                source={{ uri: item.img }}
+                source={{ uri: item.image }}
                 style={{
                   width: width * 0.2,
                   height: height * 0.1,
                   borderRadius: 35,
                 }}
               />
-              <Text style={{ marginTop: 5, fontSize: 10 }}>{item.title}</Text>
+              <Text style={{ marginTop: 5, fontSize: 12, fontWeight: "400" }}>
+                {item.name}
+              </Text>
             </View>
           </TouchableWithoutFeedback>
         )}

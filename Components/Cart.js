@@ -23,7 +23,7 @@ try {
 await setDoc(doc(db,"Orders",userID),{
   list_orders : card,
 })
-
+Alert.alert("Success", "Order Sent Successfully", [{ text: "OK" }]);
 } catch (error) {
   
 }
@@ -158,7 +158,7 @@ await updateDoc(doc(db,"Orders",userID),{
 
 {
   card.map((item, index) =>(
-  <View key={index} style={{elevation:15,marginTop: height * 0.02, flexDirection: "row", backgroundColor: "#ECEAEA", width: width * 0.99, paddingVertical: 15, borderRadius: 15, marginLeft: 2}}>
+  <View key={index} style={{elevation:20,marginTop: height * 0.02, flexDirection: "row", backgroundColor: "#ECEAEA", width: width * 0.99, paddingVertical: 15, marginLeft: 2}}>
     <Image source={{uri: item.img}} style={{width: width * 0.2, height: height * 0.1,resizeMode:"contain",borderRadius:10,backgroundColor:"white"}} />
     <View style={{width: width * 0.65, marginTop: 5,marginLeft:10}}>
       <Text style={{fontSize: 13}}>
