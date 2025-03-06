@@ -20,7 +20,7 @@ const SeeAllCat = () => {
       let data = await response.json();
   
       // Filter out "Computers" and "Grocery" categories
-      data = data.filter(item => item.name !== "Computer Category" && item.name !== "Grosery");
+      data = data.filter(item => item.name !== "Computer Category" && item.name !== "Grosery"&& item.name !== "dfdf");
   
       setCategories(data);
     } catch (error) {

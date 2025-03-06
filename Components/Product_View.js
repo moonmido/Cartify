@@ -181,6 +181,7 @@ const handleAddToCart = async () => {
   data={img}
   horizontal
   pagingEnabled
+  style={{width:"90%"}}
   renderItem={({item,count})=>(
     <Image source={{uri:item}} style={{width:width*0.7,height:height*0.45, resizeMode:"contain",backgroundColor:"white",borderRadius:15,marginLeft:width*0.1}}/>
   )}
@@ -193,11 +194,11 @@ const handleAddToCart = async () => {
 <View style={{backgroundColor:"#ECEAEA",width:width*0.9,height:height*0.1,marginTop:20,position:"relative",borderRadius:15}}>
 <Text style={{padding:20,alignItems:"center",justifyContent:"center"}}>Quantity</Text>
 <View style={{position:"absolute",display:"flex",flexDirection:"row",right:0,margin:height*0.025}}>
-<TouchableOpacity style={{marginRight:width*0.1,backgroundColor:"#8E6CEF",borderRadius:35 , width:30,paddingLeft:9}} onPress={()=>setQuan(quan+1)}>
+<TouchableOpacity style={{marginRight:width*0.1,backgroundColor:"#8E6CEF",borderRadius:35 , width:width*0.1,paddingLeft:width*0.032}} onPress={()=>setQuan(quan+1)}>
   <Text style={{fontSize:20,color:"white",fontWeight:"700"}}>+</Text>
 </TouchableOpacity>
 <Text style={{marginRight:width*0.1,fontSize:15,marginTop:5}}>{quan}</Text>
-<TouchableOpacity style={{backgroundColor:"#8E6CEF",borderRadius:35 , width:30,paddingLeft:11}}  onPress={()=>quan==0 ? setQuan(0) : setQuan(quan-1)}>
+<TouchableOpacity style={{backgroundColor:"#8E6CEF",borderRadius:35 , width:width*0.1,paddingLeft:width*0.037}}  onPress={()=>quan==0 ? setQuan(0) : setQuan(quan-1)}>
   <Text style={{fontSize:20,color:"white",fontWeight:"700"}}>-</Text>
 </TouchableOpacity>
 </View>
