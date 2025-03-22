@@ -12,12 +12,15 @@ import Product_View from './Components/Product_View';
 import Cart from './Components/Cart';
 import Favorite from './Components/Favorite';
 import Notification from './Components/Notification';
+import Splach from './Components/Splach/Splach';
+import SplachChanger from './Components/Splach/SplachChanger';
 export default function App() {
 const Stack = createStackNavigator();
 
   return (
 <NavigationContainer>
-<Stack.Navigator initialRouteName='home'>
+<Stack.Navigator initialRouteName='SplachChanger'>
+<Stack.Screen name='SplachChanger' component={SplachChanger} options={{headerShown:false}}/>
 <Stack.Screen name='prodview' component={Product_View} options={{headerShown:false}}/>
 <Stack.Screen name='CatProd' component={CatProd} options={{headerShown:false}}/>
 <Stack.Screen name='seeAllTop' component={SeeAllTop} options={{headerShown:false}}/>

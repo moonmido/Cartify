@@ -92,8 +92,8 @@ const handleSignup= async()=>{
     <TextInput placeholder='Lastname' value={lname} onChangeText={(e)=>setLname(e)} style={{backgroundColor:"#ECEAEA",width:width*0.83,borderRadius:10,marginTop:height*0.03,paddingHorizontal:10,height:height*0.07}}/>
     <TextInput placeholder='Email Address' keyboardType="email-address"  value={email} onChangeText={(e)=>setEmail(e)}  style={{backgroundColor:"#ECEAEA",width:width*0.83,borderRadius:10,marginTop:height*0.03,paddingHorizontal:10,height:height*0.07}}/>
     <TextInput placeholder='Password'  value={password} onChangeText={(e)=>setPassword(e)} keyboardType='visible-password'  style={{backgroundColor:"#ECEAEA",width:width*0.83,borderRadius:10,marginTop:height*0.03,paddingHorizontal:10,height:height*0.07}}/>
-<TouchableOpacity style={{borderRadius:15,backgroundColor:"transparent",width:width*0.65,alignItems:"center",marginLeft:0,marginTop:height*0.05,borderWidth:0.5,borderColor:"#8E6CEF",elevation:20,shadowColor:"#8E6CEF"}} onPress={handleImg}>
-  <Text style={{padding:5,fontWeight:"700"}}><Entypo name="folder-images" size={24} color="#8E6CEF" />   Select Profile picture</Text>
+<TouchableOpacity style={{borderRadius:15,backgroundColor:"transparent",width:width*0.65,alignItems:"center",marginLeft:0,marginTop:height*0.04,borderWidth:0.5,borderColor:"#8E6CEF",elevation:20,shadowColor:"#8E6CEF"}} onPress={handleImg}>
+  <Text style={{padding:5,fontWeight:"700",paddingBottom:10}}><Entypo name="folder-images" size={24} color="#8E6CEF" />   Select Profile picture</Text>
 </TouchableOpacity>
 <TouchableOpacity style={{marginTop:height*0.05,backgroundColor:"#8E6CEF",justifyContent:"center",alignItems:"center",width:width*0.83,borderRadius:25}} onPress={handleSignup}>
     <Text style={{padding:height*0.017,color:"white",fontWeight:"700"}}>Continue</Text>
