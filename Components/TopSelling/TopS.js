@@ -40,7 +40,7 @@ if (loading) {
 
 <View style={{display:"flex",flexDirection:"row",justifyContent:"space-between" , marginTop:10}}>
 <Text style={{ fontSize: 16, fontWeight: "800" }}>Top Selling</Text>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate("seeAllTop")}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate("seeAllTop",{search:""})}>
           <Text style={{ fontSize: 16, marginRight: width * 0.15 }}>See All</Text>
         </TouchableWithoutFeedback>        
         </View>

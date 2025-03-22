@@ -11,14 +11,12 @@ import { db } from '../../Firebase/firebase';
 const {width,height} = Dimensions.get("window");
 
 
-const SeeAllTop = () => {
+const SeeAllTop = ({route}) => {
 const navigation = useNavigation();
 const [allPROD,setAllPROD] = useState([]);
 const [loading,setLoading] = useState(true);
 const [save,setSave] = useState(true);
-
-
-
+const {search} = route.params;
 
 const [counter,setCounter] = useState(0);
 
@@ -61,7 +59,7 @@ if(loading){
         padding: 10, // Optional padding for better alignment
       }}
     >
-      {allPROD.map((item, index) => (
+      {allPROD.map((item, index) =>{ if(item.title.toLowerCase().includes(search.toLowerCase())) {return (
         <TouchableWithoutFeedback key={index} onPress={()=>navigation.navigate("prodview",{
 title : item.title,
 img : item.images,
@@ -113,7 +111,7 @@ description : item.description
             </Text>
           </View>
         </TouchableWithoutFeedback>
-      ))}
+      )}})}
     </View>
 
     </ScrollView>
